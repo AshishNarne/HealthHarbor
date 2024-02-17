@@ -1,2 +1,10 @@
 # HealthHarbor
 A collaborative WIP SWE project with the following functionality: Have a reminder/appointments website that can have both patient and doctor accounts that are connected. Doctors can schedule appointments and create reminders for their patients to take medicine.
+
+## Run terminal commands
+
+### To activate the venv
+. .venv/bin/activate
+
+### To run the project
+python -m flask --app board run --port 8000 --debug
