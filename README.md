@@ -8,3 +8,13 @@ A collaborative WIP SWE project with the following functionality: Have a reminde
 
 ### To run the project
 python -m flask --app board run --port 8000 --debug
+
+### To connect to the database in the command line
+Starting from the root directory of the project
+
+sqlite3
+.open board.sqlite
+
+To show headers and align table columns
+.header on
+.mode column
