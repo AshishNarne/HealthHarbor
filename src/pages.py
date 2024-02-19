@@ -1,5 +1,6 @@
-from flask import Blueprint, render_template, request, redirect, url_for
+from flask import Blueprint, render_template, request, redirect, url_for, flash
 from werkzeug.security import generate_password_hash, check_password_hash
+from flask_login import login_user, logout_user, login_required, current_user
 from .models import User
 from . import db
 
@@ -19,16 +20,19 @@ def login():
 
 @bp.route('/login', methods=['POST'])
 def login_post():
-    username = request.form.get('username')
+    email = request.form.get('email')
     pwd = request.form.get('pwd')
+    remember = bool(request.form.get('remember'))
     
-    user = User.query.filter_by(username=username).first()
+    user = User.query.filter_by(email=email).first()
     if not user:
-        print('Not a username')
+        print('Not an existing email')
         return redirect(url_for('pages.login'))
-    if not check_password_hash(user.pwd, pwd):
+    if not check_password_hash(user.pwd_hash, pwd):
         print('Wrong password')
         return redirect(url_for('pages.login'))
+    print(f'{user = }')
+    login_user(user, remember=remember)
     return render_template('pages/home.html')
 
 @bp.route('/signup')
@@ -38,18 +42,32 @@ def signup():
 @bp.route('/signup', methods=['POST'])
 def signup_post():
     email = request.form.get('email')
-    username = request.form.get('username')
+    fname = request.form.get('fname')
+    lname = request.form.get('lname')
     pwd = request.form.get('pwd')
 
     user = User.query.filter_by(email=email).first() # if this returns a user, then the email already exists in database
 
     if user: # if a user is found, we want to redirect back to signup page so user can try again
+        flash('stupid!')
         return redirect(url_for('pages.signup'))
 
     # create a new user with the form data. Hash the password so the plaintext version isn't saved.
-    new_user = User(email=email, username=username, pwd=generate_password_hash(pwd))
+    new_user = User(email=email, fname=fname, lname=lname, pwd_hash=generate_password_hash(pwd))
 
     # add the new user to the database
     db.session.add(new_user)
     db.session.commit()
-    return redirect(url_for('pages.login'))
+    login_user(user, remember=False)
+    return redirect(url_for('pages.profile'))
+
+@bp.route('/profile')
+@login_required
+def profile():
+    return render_template('pages/profile.html', user=current_user)
+
+@bp.route('/logout')
+@login_required
+def logout():
+    logout_user()
+    return redirect(url_for('pages.home'))
