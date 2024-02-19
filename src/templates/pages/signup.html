@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    Signup
+{% endblock %}
+
+{% block content %}
+    <section class='login'>
+        {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            <div class="notification is-danger">
+                {{ messages[0] }}. Go to <a href="{{ url_for('pages.login') }}">login page</a>.
+            </div>
+        {% endif %}
+        {% endwith %}
+        <form class='login-form' method='post' autocomplete='off'>
+            <div>
+                <label for='email'>Email</label>
+                <input name='email' type='text' placeholder='Email'/>
+            </div>
+            <div>
+                <label for='fname'>First Name</label>
+                <input name='fname' type='text' placeholder='First Name'/>
+            </div>
+            <div>
+                <label for='lname'>Last Name</label>
+                <input name='lname' type='text' placeholder='Last Name'/>
+            </div>
+            <div>
+                <label for='pwd'>Password</label>
+                <input name='pwd' type='password' placeholder='Password'/>
+            </div>
+            <button>Sign up</button>
+        </form>
+    </section>
+{% endblock %}
