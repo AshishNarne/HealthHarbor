@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    Signup
+{% endblock %}
+
+{% block content %}
+    <section class='login'>
+        <form class='login-form' method='post'>
+            <div>
+                <label for='username'>Username</label>
+                <input name='username' type='text' placeholder='Username'/>
+            </div>
+            <div>
+                <label for='pwd'>Password</label>
+                <input name='pwd' type='password' placeholder='Password'/>
+            </div>
+            <div>
+                <label for='email'>Email</label>
+                <input name='email' type='text' placeholder='Email'/>
+            </div>
+            <button>Sign up</button>
+        </form>
+    </section>
+{% endblock %}
