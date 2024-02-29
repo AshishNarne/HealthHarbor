@@ -5,27 +5,40 @@ A collaborative WIP SWE project with the following functionality: Have a reminde
 
 ### To create and activate a venv
 Create
-`python -m venv venv`
+```
+python -m venv venv
+```
 
 Activate
 
 On Windows
-`.\venv\Scripts\activate`
+```
+.\venv\Scripts\activate
+````
 
 On MacOS/Linux
-`. .venv/bin/activate`
+```
+. .venv/bin/activate
+```
 
 ### Install required packages
-`pip install -r requirements.txt`
+```
+pip install -r requirements.txt
+```
 
 ### To run the project
-`python -m flask --app src run --port 8000 --debug`
+```
+python -m flask --app src run --port 8000 --debug
+```
 
 ### To connect to the database in the command line
 Starting from the root directory of the project
-`sqlite3 instance/db.sqlite`
+```
+sqlite3 instance/db.sqlite
+```
 To show headers and align table columns
 ```
 .header on
 .mode table
 ```
+You will have to do this every time you open the database. To make it persistent, create ~/.sqliterc and paste those commands in it.
