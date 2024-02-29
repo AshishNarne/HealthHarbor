@@ -7,7 +7,7 @@ A collaborative WIP SWE project with the following functionality: Have a reminde
 . .venv/bin/activate
 
 ### To run the project
-python -m flask --app board run --port 8000 --debug
+python -m flask --app src run --port 8000 --debug
 
 ### To connect to the database in the command line
 Starting from the root directory of the project
