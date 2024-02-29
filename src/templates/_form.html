@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <section class='login'>
+        {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            
+        {% endif %}
+        {% endwith %}
+        <form class='login-form' method='post' autocomplete='off'>
+            <h2>{% block title %}{% endblock %}</h2>
+            {% block form_content %}
+            {% endblock %}
+        </form>
+    </section>
+{% endblock %}
