@@ -3,14 +3,14 @@
         <li><a href="{{ url_for('pages.home') }}">Home</a></li>
         <li><a href="{{ url_for('pages.about') }}">About</a></li>
         
-        { % if not current_user.is_authenticated % }
+        {% if not current_user.is_authenticated %}
             <li><a href="{{ url_for('pages.login') }}">Login</a></li>
             <li><a href="{{ url_for('pages.signup') }}">Signup</a></li>
-        { % endif % }
+        {% endif %}
         
-        { % if current_user.is_authenticated % }
+        {% if current_user.is_authenticated %}
             <li><a href="{{ url_for('pages.profile') }}">Profile</a></li>
             <li><a href="{{ url_for('pages.logout') }}">Logout</a></li>
-        { % endif % }
+        {% endif %}
     </ul>
 </nav>

@@ -12,7 +12,10 @@
     </title>
 </head>
 <body>
-    {% include '_navigation.html'   %}
+    <header>
+        <h1>HealthHarbor</h1>
+        {% include '_navigation.html' %}
+    </header>
     <main>
         {% block content %}
         {% endblock %}
