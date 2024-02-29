@@ -1,4 +1,5 @@
 from flask import Blueprint, render_template, request, redirect, url_for, flash
+from markupsafe import Markup
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import login_user, logout_user, login_required, current_user
 from .models import User
@@ -49,7 +50,8 @@ def signup_post():
     user = User.query.filter_by(email=email).first() # if this returns a user, then the email already exists in database
 
     if user: # if a user is found, we want to redirect back to signup page so user can try again
-        flash('stupid!')
+        login_url = url_for('pages.login')
+        flash(Markup(f'User already exists, go to the <a href={login_url}>login page</a>'))
         return redirect(url_for('pages.signup'))
 
     # create a new user with the form data. Hash the password so the plaintext version isn't saved.
@@ -58,7 +60,7 @@ def signup_post():
     # add the new user to the database
     db.session.add(new_user)
     db.session.commit()
-    login_user(user, remember=False)
+    login_user(new_user, remember=False)
     return redirect(url_for('pages.profile'))
 
 @bp.route('/profile')

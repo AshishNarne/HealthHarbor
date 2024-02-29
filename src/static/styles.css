@@ -81,6 +81,10 @@ nav a {
     border-radius: 1rem;
 }
 
+.flashed-messages {
+    background-color: red;
+}
+
 .login-form > * {
     margin: .5rem;
 }
