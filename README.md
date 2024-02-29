@@ -3,17 +3,29 @@ A collaborative WIP SWE project with the following functionality: Have a reminde
 
 ## Important terminal commands
 
-### To activate the venv
-. .venv/bin/activate
+### To create and activate a venv
+Create
+`python -m venv venv`
+
+Activate
+
+On Windows
+`.\venv\Scripts\activate`
+
+On MacOS/Linux
+`. .venv/bin/activate`
+
+### Install required packages
+`pip install -r requirements.txt`
 
 ### To run the project
-python -m flask --app src run --port 8000 --debug
+`python -m flask --app src run --port 8000 --debug`
 
 ### To connect to the database in the command line
 Starting from the root directory of the project
-
-sqlite3 instance/db.sqlite
-
+`sqlite3 instance/db.sqlite`
 To show headers and align table columns
+```
 .header on
 .mode table
+```
