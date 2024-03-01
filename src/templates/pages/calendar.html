@@ -1,0 +1,34 @@
+{% extends '_form.html' %}
+
+{% block title %}
+    Calendar
+{% endblock %}
+
+<!-- time, title, desc -->
+{% block form_content %}
+    <div>
+        <label for='date'>Date</label>
+        <input name='date' type='date'/>
+    </div>
+    <div>
+        <label for='time'>Time</label>
+        <input name='time' type='time'/>
+    </div>
+    <div>
+        <label for='title'>Title</label>
+        <input name='title' type='text' placeholder='Title'/>
+    </div>
+    <div>
+        <label for='desc'>Description</label>
+        <input name='desc' type='text' placeholder='Description'/>
+    </div>
+    <button>Add Reminder</button>
+{% endblock %}
+
+{% block extra_content %}
+    <ul>
+        {% for reminder in reminders %}
+            <li>{{reminder.title}}</li>
+        {% endfor %}
+    </ul>
+{% endblock %}

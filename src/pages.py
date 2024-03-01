@@ -2,7 +2,8 @@ from flask import Blueprint, render_template, request, redirect, url_for, flash
 from markupsafe import Markup
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import login_user, logout_user, login_required, current_user
-from .models import User
+from datetime import datetime
+from .models import User, Reminder
 from . import db
 
 bp = Blueprint('pages', __name__)
@@ -76,3 +77,25 @@ def profile():
 def logout():
     logout_user()
     return redirect(url_for('pages.home'))
+
+@bp.route('/calendar')
+@login_required
+def calendar():
+    return render_template('pages/calendar.html', reminders=current_user.reminders)
+
+@bp.route('/calendar', methods=['POST'])
+@login_required
+def calendar_post():
+    date = request.form.get('date')
+    time = request.form.get('time')
+    title = request.form.get('title')
+    desc = request.form.get('desc')
+    print(f'Adding reminder {date, time, title, desc}')
+    timestamp = datetime.strptime(f'{date} {time}', '%Y-%m-%d %H:%M')
+    print(timestamp)
+    
+    new_reminder = Reminder(timestamp=timestamp, title=title, desc=desc, user_id=current_user.id)
+    db.session.add(new_reminder)
+    db.session.commit()
+
+    return redirect(url_for('pages.calendar'))
