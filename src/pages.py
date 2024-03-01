@@ -27,12 +27,13 @@ def login_post():
     
     user = User.query.filter_by(email=email).first()
     if not user:
-        print('Not an existing email')
+        # maybe we shouldn't tell the user this
+        flash('Not an existing email')
         return redirect(url_for('pages.login'))
     if not check_password_hash(user.pwd_hash, pwd):
-        print('Wrong password')
+        flash('Wrong password')
         return redirect(url_for('pages.login'))
-    print(f'{user = }')
+    print(f'{user = } logging in')
     login_user(user, remember=remember)
     return render_template('pages/home.html')
 
@@ -47,9 +48,11 @@ def signup_post():
     lname = request.form.get('lname')
     pwd = request.form.get('pwd')
 
-    user = User.query.filter_by(email=email).first() # if this returns a user, then the email already exists in database
+    # look for an existing user
+    user = User.query.filter_by(email=email).first()
 
-    if user: # if a user is found, we want to redirect back to signup page so user can try again
+    # if there is already a user with that email, don't allow creation of a new account, redirect to login page
+    if user: 
         login_url = url_for('pages.login')
         flash(Markup(f'User already exists, go to the <a href={login_url}>login page</a>'))
         return redirect(url_for('pages.signup'))
