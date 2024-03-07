@@ -1,21 +1,11 @@
-{% extends '_form.html' %}
+{% extends 'base.html' %}
 
 {% block title %}
     Login
 {% endblock %}
 
-{% block form_content %}
-    <div>
-        <label for='email'>Email</label>
-        <input name='email' type='text' placeholder='Email'/>
-    </div>
-    <div>
-        <label for='pwd'>Password</label>
-        <input name='pwd' type='password' placeholder='Password'/>
-    </div>
-    <div>
-        <label for='remember'>Remember Me</label>
-        <input name='remember' type='checkbox'/>
-    </div>
-    <button>Log in</button>
+{% block content %}
+    {% with title='Login' %}
+        {% include 'login_form.html' %}
+    {% endwith %}
 {% endblock %}

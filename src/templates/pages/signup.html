@@ -1,25 +1,11 @@
-{% extends '_form.html' %}
+{% extends 'base.html' %}
 
 {% block title %}
     Signup
 {% endblock %}
 
-{% block form_content %}
-    <div>
-        <label for='email'>Email</label>
-        <input name='email' type='text' placeholder='Email'/>
-    </div>
-    <div>
-        <label for='fname'>First Name</label>
-        <input name='fname' type='text' placeholder='First Name'/>
-    </div>
-    <div>
-        <label for='lname'>Last Name</label>
-        <input name='lname' type='text' placeholder='Last Name'/>
-    </div>
-    <div>
-        <label for='pwd'>Password</label>
-        <input name='pwd' type='password' placeholder='Password'/>
-    </div>
-    <button>Sign up</button>
+{% block content %}
+    {% with title='Signup' %}
+        {% include 'signup_form.html' %}
+    {% endwith %}
 {% endblock %}

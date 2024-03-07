@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    Calendar
+{% endblock %}
+
+{% block content %}
+    {% with title='Add a Reminder' %}
+        {% include 'add_reminder_form.html' %}
+    {% endwith %}
+    <ul>
+        {% for reminder in reminders %}
+            <li>{{reminder.title}}</li>
+        {% endfor %}
+    </ul>
+{% endblock %}
