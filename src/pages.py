@@ -93,10 +93,10 @@ def calendar():
         reminders
     )
     dates = [monday + datetime.timedelta(days=i) for i in range(7)]
-    month_str = dates[0].strftime('%B')
-    end_month = dates[-1].strftime('%B')
+    month_str = dates[0].strftime('%b')
+    end_month = dates[-1].strftime('%b')
     if end_month != month_str:
-        month_str += ('- ' + end_month)
+        month_str += (' - ' + end_month)
     reminders_by_weekday = [[] for _ in range(7)]
     for reminder in reminders:
         reminders_by_weekday[reminder.timestamp.weekday()].append(reminder)
