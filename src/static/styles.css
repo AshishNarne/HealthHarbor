@@ -97,6 +97,7 @@ nav a {
 }
 
 .day {
+    background-color: var(--clr-accent2);
     flex-basis: 100%;
     padding: .5rem;
     border: 2px solid var(--clr-light);
@@ -118,4 +119,8 @@ nav a {
     text-decoration: underline;
     font-weight: bold;
     font-size: 1.25rem;
+}
+
+.month {
+    font-size: 2em;
 }

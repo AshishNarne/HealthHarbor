@@ -9,13 +9,19 @@
         {% include 'add_reminder_form.html' %}
     {% endwith %}
     <a href='{{url_for("pages.calendar", week=week - 1 ) }}'>
-        <<
+        <button>
+            <<
+        </button>
     </a>
     <a href='{{url_for("pages.calendar", week=week + 1 ) }}'>
-        >>
+        <button>
+            >>
+        </button>
     </a>
-    <div class='calendar'>
+    <div class='month'>
         {{month_str}}
+    </div>
+    <div class='calendar'>
         {% for i in range(7) %}
             <div class='day'>
                 <div class='day-title'>
