@@ -100,8 +100,7 @@ def calendar():
     reminders_by_weekday = [[] for _ in range(7)]
     for reminder in reminders:
         reminders_by_weekday[reminder.timestamp.weekday()].append(reminder)
-    days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
-    return render_template('pages/calendar.html', reminders_by_weekday=reminders_by_weekday, days=days, dates=dates, month_str=month_str, week=week)
+    return render_template('pages/calendar.html', reminders_by_weekday=reminders_by_weekday, dates=dates, month_str=month_str, week=week)
 
 @bp.route('/calendar', methods=['POST'])
 @login_required

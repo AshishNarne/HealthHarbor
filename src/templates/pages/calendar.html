@@ -25,7 +25,7 @@
         {% for i in range(7) %}
             <div class='day'>
                 <div class='day-title'>
-                    {{days[i]}}
+                    {{dates[i].strftime('%a')}}
                 </div>
                 <div class='day-title'>
                     {{dates[i].strftime('%d')}}
