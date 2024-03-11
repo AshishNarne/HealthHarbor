@@ -25,7 +25,9 @@
         {% for i in range(7) %}
             <div class='day'>
                 <div class='day-title'>
-                    {{days[i]}},
+                    {{days[i]}}
+                </div>
+                <div class='day-title'>
                     {{dates[i].strftime('%d')}}
                 </div>
                 {% for reminder in reminders_by_weekday[i] %}
