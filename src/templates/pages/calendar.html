@@ -31,7 +31,6 @@
                 {% for reminder in reminders_by_weekday[i] %}
                     <ul class='reminder'>
                         <li class='reminder-title'>{{reminder.title}}</li>
-                        <li>{{reminder.timestamp}}</li>
                         <li>{{reminder.timestamp.strftime('%I:%M %p')}}</li>
                         <li class='reminder-desc'>{{reminder.desc}}</li>
                     </ul>
