@@ -78,28 +78,37 @@ def logout():
     logout_user()
     return redirect(url_for('pages.home'))
 
-@bp.route('/calendar')
-@login_required
-def calendar():
-    week = int(request.args.get('week', '0'))
-    reminders = current_user.reminders
+def build_month_str(date1: datetime.date, date2: datetime.date) -> str:
+    month_str = date2.strftime('%b %Y')
+    if date1.month != date2.month:
+        fmat = '%b' if date1.year == date2.year else '%b %Y'
+        month_str = f'{date1.strftime(fmat)} - ' + month_str
+    return month_str
+
+def process_reminders(reminders: list[Reminder], monday: datetime.date) -> list[list[Reminder]]:
     reminders.sort(key=lambda reminder: reminder.timestamp)
-    today = datetime.date.today()
-    monday = today - datetime.timedelta(days=today.weekday())
-    monday += datetime.timedelta(weeks=week)
     reminders = filter(
         lambda reminder: 
             datetime.timedelta(days=0) <= reminder.timestamp.date() - monday < datetime.timedelta(days=7),
         reminders
     )
-    dates = [monday + datetime.timedelta(days=i) for i in range(7)]
-    month_str = dates[0].strftime('%b')
-    end_month = dates[-1].strftime('%b')
-    if end_month != month_str:
-        month_str += (' - ' + end_month)
     reminders_by_weekday = [[] for _ in range(7)]
     for reminder in reminders:
         reminders_by_weekday[reminder.timestamp.weekday()].append(reminder)
+    return reminders_by_weekday
+
+@bp.route('/calendar')
+@login_required
+def calendar():
+    week = int(request.args.get('week', '0'))
+    
+    today = datetime.date.today()
+    monday = today - datetime.timedelta(days=today.weekday()) + datetime.timedelta(weeks=week)
+    dates = [monday + datetime.timedelta(days=i) for i in range(7)]
+    
+    month_str = build_month_str(dates[0], dates[-1])
+    reminders_by_weekday = process_reminders(current_user.reminders, monday)
+
     return render_template('pages/calendar.html', reminders_by_weekday=reminders_by_weekday, dates=dates, month_str=month_str, week=week)
 
 @bp.route('/calendar', methods=['POST'])
