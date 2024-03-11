@@ -2,7 +2,7 @@ from flask import Blueprint, render_template, request, redirect, url_for, flash
 from markupsafe import Markup
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import login_user, logout_user, login_required, current_user
-from datetime import datetime
+import datetime
 from .models import User, Reminder
 from . import db
 
@@ -78,10 +78,38 @@ def logout():
     logout_user()
     return redirect(url_for('pages.home'))
 
+def build_month_str(date1: datetime.date, date2: datetime.date) -> str:
+    month_str = date2.strftime('%b %Y')
+    if date1.month != date2.month:
+        fmat = '%b' if date1.year == date2.year else '%b %Y'
+        month_str = f'{date1.strftime(fmat)} - ' + month_str
+    return month_str
+
+def process_reminders(reminders: list[Reminder], monday: datetime.date) -> list[list[Reminder]]:
+    reminders.sort(key=lambda reminder: reminder.timestamp)
+    reminders = filter(
+        lambda reminder: 
+            datetime.timedelta(days=0) <= reminder.timestamp.date() - monday < datetime.timedelta(days=7),
+        reminders
+    )
+    reminders_by_weekday = [[] for _ in range(7)]
+    for reminder in reminders:
+        reminders_by_weekday[reminder.timestamp.weekday()].append(reminder)
+    return reminders_by_weekday
+
 @bp.route('/calendar')
 @login_required
 def calendar():
-    return render_template('pages/calendar.html', reminders=current_user.reminders)
+    week = int(request.args.get('week', '0'))
+    
+    today = datetime.date.today()
+    monday = today - datetime.timedelta(days=today.weekday()) + datetime.timedelta(weeks=week)
+    dates = [monday + datetime.timedelta(days=i) for i in range(7)]
+    
+    month_str = build_month_str(dates[0], dates[-1])
+    reminders_by_weekday = process_reminders(current_user.reminders, monday)
+
+    return render_template('pages/calendar.html', reminders_by_weekday=reminders_by_weekday, dates=dates, month_str=month_str, week=week)
 
 @bp.route('/calendar', methods=['POST'])
 @login_required
@@ -91,7 +119,7 @@ def calendar_post():
     title = request.form.get('title')
     desc = request.form.get('desc')
     print(f'Adding reminder {date, time, title, desc}')
-    timestamp = datetime.strptime(f'{date} {time}', '%Y-%m-%d %H:%M')
+    timestamp = datetime.datetime.strptime(f'{date} {time}', '%Y-%m-%d %H:%M')
     print(timestamp)
     
     new_reminder = Reminder(timestamp=timestamp, title=title, desc=desc, user_id=current_user.id)
