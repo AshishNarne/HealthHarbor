@@ -8,9 +8,29 @@
     {% with title='Add a Reminder' %}
         {% include 'add_reminder_form.html' %}
     {% endwith %}
-    <ul>
-        {% for reminder in reminders %}
-            <li>{{reminder.title}}</li>
+    <a href='{{url_for("pages.calendar", week=week - 1 ) }}'>
+        <<
+    </a>
+    <a href='{{url_for("pages.calendar", week=week + 1 ) }}'>
+        >>
+    </a>
+    <div class='calendar'>
+        {{month_str}}
+        {% for i in range(7) %}
+            <div class='day'>
+                <div class='day-title'>
+                    {{days[i]}},
+                    {{dates[i].strftime('%d')}}
+                </div>
+                {% for reminder in reminders_by_weekday[i] %}
+                    <ul class='reminder'>
+                        <li class='reminder-title'>{{reminder.title}}</li>
+                        <li>{{reminder.timestamp}}</li>
+                        <li>{{reminder.timestamp.strftime('%I:%M %p')}}</li>
+                        <li class='reminder-desc'>{{reminder.desc}}</li>
+                    </ul>
+                {% endfor %}
+            </div>
         {% endfor %}
-    </ul>
+    </div>
 {% endblock %}

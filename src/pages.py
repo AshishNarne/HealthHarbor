@@ -2,7 +2,7 @@ from flask import Blueprint, render_template, request, redirect, url_for, flash
 from markupsafe import Markup
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import login_user, logout_user, login_required, current_user
-from datetime import datetime
+import datetime
 from .models import User, Reminder
 from . import db
 
@@ -81,7 +81,27 @@ def logout():
 @bp.route('/calendar')
 @login_required
 def calendar():
-    return render_template('pages/calendar.html', reminders=current_user.reminders)
+    week = int(request.args.get('week', '0'))
+    reminders = current_user.reminders
+    reminders.sort(key=lambda reminder: reminder.timestamp)
+    today = datetime.date.today()
+    monday = today - datetime.timedelta(days=today.weekday())
+    monday += datetime.timedelta(weeks=week)
+    reminders = filter(
+        lambda reminder: 
+            datetime.timedelta(days=0) <= reminder.timestamp.date() - monday < datetime.timedelta(days=7),
+        reminders
+    )
+    dates = [monday + datetime.timedelta(days=i) for i in range(7)]
+    month_str = dates[0].strftime('%B')
+    end_month = dates[-1].strftime('%B')
+    if end_month != month_str:
+        month_str += ('- ' + end_month)
+    reminders_by_weekday = [[] for _ in range(7)]
+    for reminder in reminders:
+        reminders_by_weekday[reminder.timestamp.weekday()].append(reminder)
+    days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
+    return render_template('pages/calendar.html', reminders_by_weekday=reminders_by_weekday, days=days, dates=dates, month_str=month_str, week=week)
 
 @bp.route('/calendar', methods=['POST'])
 @login_required
@@ -91,7 +111,7 @@ def calendar_post():
     title = request.form.get('title')
     desc = request.form.get('desc')
     print(f'Adding reminder {date, time, title, desc}')
-    timestamp = datetime.strptime(f'{date} {time}', '%Y-%m-%d %H:%M')
+    timestamp = datetime.datetime.strptime(f'{date} {time}', '%Y-%m-%d %H:%M')
     print(timestamp)
     
     new_reminder = Reminder(timestamp=timestamp, title=title, desc=desc, user_id=current_user.id)

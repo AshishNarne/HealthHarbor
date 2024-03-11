@@ -88,3 +88,34 @@ nav a {
 .login-form > * {
     margin: .5rem;
 }
+
+.calendar {
+    display: flex;
+    flex-direction: row;
+    max-width: 100%;
+    height: 100%;
+}
+
+.day {
+    flex-basis: 100%;
+    padding: .5rem;
+    border: 2px solid var(--clr-light);
+}
+
+.day-title {
+    text-align: center;
+}
+
+.reminder {
+    background-color: var(--clr-accent1);
+    margin: .5rem;
+    padding: .5rem;
+    list-style-type: none;
+    border-radius: .5rem;
+}
+
+.reminder-title {
+    text-decoration: underline;
+    font-weight: bold;
+    font-size: 1.25rem;
+}
