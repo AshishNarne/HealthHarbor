@@ -97,7 +97,7 @@ def process_reminders(reminders: list[Reminder], monday: datetime.date) -> list[
         reminders_by_weekday[reminder.timestamp.weekday()].append(reminder)
     return reminders_by_weekday
 
-@bp.route('/calendar')
+@bp.route('/calendar', methods=['GET'])
 @login_required
 def calendar():
     week = int(request.args.get('week', '0'))
@@ -127,3 +127,11 @@ def calendar_post():
     db.session.commit()
 
     return redirect(url_for('pages.calendar'))
+
+@bp.route('/delete-reminder', methods=['POST'])
+def delete_reminder():
+    week = int(request.args.get('week'))
+    reminder_id = int(request.args.get('reminder_id'))
+    Reminder.query.filter_by(id=reminder_id).delete()
+    db.session.commit()
+    return redirect(url_for('pages.calendar', week=week))

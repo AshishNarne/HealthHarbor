@@ -32,6 +32,9 @@
                 </div>
                 {% for reminder in reminders_by_weekday[i] %}
                     <ul class='reminder'>
+                        <form action="{{ url_for('pages.delete_reminder', reminder_id=reminder.id, week=week) }}" method=post>
+                            <button>delete</button>
+                        </form>
                         <li class='reminder-title'>{{reminder.title}}</li>
                         <li>{{reminder.timestamp.strftime('%I:%M %p')}}</li>
                         <li class='reminder-desc'>{{reminder.desc}}</li>
