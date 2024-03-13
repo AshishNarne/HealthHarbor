@@ -97,7 +97,7 @@ def process_reminders(reminders: list[Reminder], monday: datetime.date) -> list[
         reminders_by_weekday[reminder.timestamp.weekday()].append(reminder)
     return reminders_by_weekday
 
-@bp.route('/calendar', methods=['GET'])
+@bp.route('/calendar')
 @login_required
 def calendar():
     week = int(request.args.get('week', '0'))
