@@ -2,4 +2,4 @@
 .DS_STORE
 __pycache__/
 .history/
-venv
+venv/
