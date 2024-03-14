@@ -141,7 +141,8 @@ def delete_reminder():
 
 @bp.route('/add-patient', methods=['GET', 'POST'])
 def add_patient():
-    print(current_user.patients)
+    if current_user.user_type != 'doctor':
+        return render_template('pages/forbidden.html'), 403
     patients = []
     input_name = request.form.get('name')
     if input_name is not None:
