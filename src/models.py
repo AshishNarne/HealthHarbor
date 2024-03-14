@@ -4,6 +4,7 @@ from sqlalchemy import ForeignKey
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from . import db
 
+
 class User(UserMixin, db.Model):
     # id is just an autoincrementing(?) integer (1, 2, 3, ...) that uniquely identifies a user
     id: Mapped[int] = mapped_column(primary_key=True)
@@ -12,13 +13,13 @@ class User(UserMixin, db.Model):
     fname: Mapped[str] = mapped_column()
     lname: Mapped[str] = mapped_column()
     pwd_hash: Mapped[str] = mapped_column()
-    reminders: Mapped[list['Reminder']] = relationship(back_populates='user')
-    
+    reminders: Mapped[list["Reminder"]] = relationship(back_populates="user")
+
+
 class Reminder(db.Model):
     id: Mapped[int] = mapped_column(primary_key=True)
-    user_id: Mapped[int] = mapped_column(ForeignKey('user.id'))
-    user: Mapped['User'] = relationship(back_populates='reminders')
+    user_id: Mapped[int] = mapped_column(ForeignKey("user.id"))
+    user: Mapped["User"] = relationship(back_populates="reminders")
     timestamp: Mapped[datetime] = mapped_column()
     title: Mapped[str] = mapped_column()
     desc: Mapped[str] = mapped_column()
-    
