@@ -2,6 +2,7 @@ from flask import Blueprint, render_template, request, redirect, url_for, flash
 from markupsafe import Markup
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import login_user, logout_user, login_required, current_user
+from sqlalchemy import func
 import datetime
 from .models import User, Reminder, Doctor, Patient
 from . import db
@@ -137,3 +138,11 @@ def delete_reminder():
     Reminder.query.filter_by(id=reminder_id).delete()
     db.session.commit()
     return redirect(url_for('pages.calendar', week=week))
+
+@bp.route('/add-patient', methods=['GET', 'POST'])
+def add_patient():
+    if request.method == 'POST':
+        input_name = request.form.get('name')
+        patients = Patient.query.filter((Patient.fname + ' ' + Patient.lname).like(input_name + '%')).all()
+        return render_template('pages/add_patient.html', patients=patients)
+    return render_template('pages/add_patient.html')
