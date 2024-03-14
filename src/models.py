@@ -21,10 +21,17 @@ class User(UserMixin, db.Model):
         'polymorphic_on': 'user_type',
     }
 
+class DoctorPatient(db.Model):
+    __tablename__ = 'doctor_patient'
+
+    id: Mapped[int] = mapped_column(primary_key=True)
+    patient_id: Mapped[int] = mapped_column(ForeignKey('patient.id'))
+    doctor_id: Mapped[int] = mapped_column(ForeignKey('doctor.id'))
+
 
 class Doctor(User):
     id: Mapped[int] = mapped_column(ForeignKey('user.id'), primary_key=True)
-    patients: Mapped[list['Patient']] = relationship(back_populates='doctor', foreign_keys='Patient.doctor_id')
+    patients: Mapped[list['Patient']] = relationship(secondary='doctor_patient', back_populates='doctors')
     __mapper_args__ = {
         'polymorphic_identity': 'doctor',
     }
@@ -32,8 +39,7 @@ class Doctor(User):
 
 class Patient(User):
     id: Mapped[int] = mapped_column(ForeignKey('user.id'), primary_key=True)
-    doctor_id: Mapped[int] = mapped_column(ForeignKey('doctor.id'))
-    doctor: Mapped['Doctor'] = relationship(back_populates='patients', foreign_keys='Patient.doctor_id')
+    doctors: Mapped[list['Doctor']] = relationship(secondary='doctor_patient', back_populates='patients')
     __mapper_args__ = {
         'polymorphic_identity': 'patient',
     }

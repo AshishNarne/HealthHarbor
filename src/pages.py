@@ -3,7 +3,7 @@ from markupsafe import Markup
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import login_user, logout_user, login_required, current_user
 import datetime
-from .models import User, Reminder
+from .models import User, Reminder, Doctor, Patient
 from . import db
 
 bp = Blueprint('pages', __name__)
@@ -48,6 +48,7 @@ def signup_post():
     fname = request.form.get('fname')
     lname = request.form.get('lname')
     pwd = request.form.get('pwd')
+    doctor = request.form.get('doctor')
 
     # look for an existing user
     user = User.query.filter_by(email=email).first()
@@ -59,7 +60,8 @@ def signup_post():
         return redirect(url_for('pages.signup'))
 
     # create a new user with the form data. Hash the password so the plaintext version isn't saved.
-    new_user = User(email=email, fname=fname, lname=lname, pwd_hash=generate_password_hash(pwd))
+    user_type = Doctor if doctor else Patient
+    new_user = user_type(email=email, fname=fname, lname=lname, pwd_hash=generate_password_hash(pwd))
 
     # add the new user to the database
     db.session.add(new_user)

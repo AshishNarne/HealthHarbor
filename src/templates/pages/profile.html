@@ -5,5 +5,7 @@
 {% endblock %}
 
 {% block content %}
-    <h1>{{user.fname}} {{user.lname}} ({{user.email}})</h1>
+    <h1>Name: {{user.fname}} {{user.lname}}</h1>
+    <h1>Email: {{user.email}}</h1>
+    <h1>Type: {{user.user_type}}</h1>
 {% endblock %}
