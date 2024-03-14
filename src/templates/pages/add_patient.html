@@ -10,7 +10,15 @@
     {% endwith %}
     <ul>
         {% for patient in patients %}
-            <li>{{patient.fname}} {{patient.lname}}</li>
+            <li>
+                <form action="{{ url_for('pages.request_patient' ) }}" method=post>
+                    <input type='hidden' name='patient_id' value='{{patient.id}}'>
+                    <input type='hidden' name='doctor_id' value='{{current_user.id}}'>
+                    <button>
+                        {{patient.fname}} {{patient.lname}} {{patient.email}}
+                    </button>
+                </form>
+            </li>
         {% endfor %}
     </ul>
 {% endblock %}

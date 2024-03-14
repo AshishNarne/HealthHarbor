@@ -135,14 +135,25 @@ def calendar_post():
 def delete_reminder():
     week = int(request.args.get('week'))
     reminder_id = int(request.args.get('reminder_id'))
-    Reminder.query.filter_by(id=reminder_id).delete()
+    Reminder.query.get(reminder_id).delete()
     db.session.commit()
     return redirect(url_for('pages.calendar', week=week))
 
 @bp.route('/add-patient', methods=['GET', 'POST'])
 def add_patient():
-    if request.method == 'POST':
-        input_name = request.form.get('name')
+    print(current_user.patients)
+    patients = []
+    input_name = request.form.get('name')
+    if input_name is not None:
         patients = Patient.query.filter((Patient.fname + ' ' + Patient.lname).like(input_name + '%')).all()
-        return render_template('pages/add_patient.html', patients=patients)
-    return render_template('pages/add_patient.html')
+    return render_template('pages/add_patient.html', patients=patients)
+
+@bp.route('/request-patient', methods=['POST'])
+def request_patient():
+    patient_id = int(request.form.get('patient_id'))
+    doctor_id = int(request.form.get('doctor_id'))
+    patient = Patient.query.get(patient_id)
+    doctor = Doctor.query.get(doctor_id)
+    doctor.patients.append(patient)
+    db.session.commit()
+    return redirect(url_for('pages.home'))
