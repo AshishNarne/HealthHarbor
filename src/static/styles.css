@@ -81,6 +81,14 @@ nav a {
     border-radius: 1rem;
 }
 
+.profile-form {
+    width: 33%;
+    flex-direction: column;
+    background-color: var(--clr-accent1);
+    padding: 1rem;
+    border-radius: 1rem;
+}
+
 .flashed-messages {
     background-color: red;
 }

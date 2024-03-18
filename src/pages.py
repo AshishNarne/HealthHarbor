@@ -48,6 +48,12 @@ def signup_post():
     fname = request.form.get('fname')
     lname = request.form.get('lname')
     pwd = request.form.get('pwd')
+    height = 'Please fill in information'
+    weight = 'Please fill in information'
+    allergies = 'Please fill in information'
+    blood_type = 'Please fill in information'
+    blood_pressure = 'Please fill in information'
+    past_medicine = 'Please fill in information'
 
     # look for an existing user
     user = User.query.filter_by(email=email).first()
@@ -59,7 +65,9 @@ def signup_post():
         return redirect(url_for('pages.signup'))
 
     # create a new user with the form data. Hash the password so the plaintext version isn't saved.
-    new_user = User(email=email, fname=fname, lname=lname, pwd_hash=generate_password_hash(pwd))
+    new_user = User(email=email, fname=fname, lname=lname, pwd_hash=generate_password_hash(pwd), height=height, weight=
+                    weight, allergies=allergies, blood_type=blood_type, blood_pressure=blood_pressure,
+                    past_medicine=past_medicine)
 
     # add the new user to the database
     db.session.add(new_user)
@@ -71,6 +79,20 @@ def signup_post():
 @login_required
 def profile():
     return render_template('pages/profile.html', user=current_user)
+@bp.route('/profile', methods=['POST'])
+@login_required
+def profile_post():
+    user = current_user
+    user.height = request.form.get('height')
+    user.weight = request.form.get('weight')
+    user.allergies = request.form.get('allergies')
+    user.blood_type = request.form.get('blood_type')
+    user.blood_pressure = request.form.get('blood_pressure')
+    user.past_medicine = request.form.get('past_medicine')
+    db.session.commit()
+    return render_template('pages/profile.html', user=current_user, height=user.height, weight=user.weight,
+                           allergies=user.allergies, blood_type=user.blood_type, blood_pressure=user.blood_pressure,
+                           past_medicine=user.past_medicine)
 
 @bp.route('/logout')
 @login_required
@@ -127,3 +149,5 @@ def calendar_post():
     db.session.commit()
 
     return redirect(url_for('pages.calendar'))
+
+
