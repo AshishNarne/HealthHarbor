@@ -1,16 +1,18 @@
 <nav>
-    <ul>
+    <ul class="navigation-list">
+        <li><a href="{{ url_for('pages.home') }}"><img src="{{ url_for('static', filename='resources/HealthHarborIcon.png') }}" alt="HealthHarbor Logo" style="width: 50px; height: 50px;"></a></li>
+
         <li><a href="{{ url_for('pages.home') }}">Home</a></li>
         <li><a href="{{ url_for('pages.about') }}">About</a></li>
-        
-        { % if not current_user.is_authenticated % }
+
+        {% if not current_user.is_authenticated %}
             <li><a href="{{ url_for('pages.login') }}">Login</a></li>
             <li><a href="{{ url_for('pages.signup') }}">Signup</a></li>
-        { % endif % }
-        
-        { % if current_user.is_authenticated % }
+        {% endif %}
+
+        {% if current_user.is_authenticated %}
             <li><a href="{{ url_for('pages.profile') }}">Profile</a></li>
             <li><a href="{{ url_for('pages.logout') }}">Logout</a></li>
-        { % endif % }
-    </ul>
-</nav>
+        {% endif %}
+        </ul>
+        </nav>
