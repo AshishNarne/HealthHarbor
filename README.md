@@ -4,8 +4,8 @@ A collaborative WIP SWE project with the following functionality: Have a reminde
 ## Important terminal commands
 
 ### To activate the venv
-. .venv/bin/activate
-
+. .venv/bin/activate (macos)
+.\venv\Scripts\activate (win)
 ### To run the project
 python -m flask --app src run --port 8000 --debug
 
