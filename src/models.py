@@ -13,9 +13,14 @@ class User(UserMixin, db.Model):
     fname: Mapped[str] = mapped_column()
     lname: Mapped[str] = mapped_column()
     pwd_hash: Mapped[str] = mapped_column()
-    reminders: Mapped[list["Reminder"]] = relationship(back_populates="user")
-
-
+    reminders: Mapped[list['Reminder']] = relationship(back_populates='user')
+    height: Mapped[str] = mapped_column()
+    weight: Mapped[str] = mapped_column()
+    allergies: Mapped[str] = mapped_column()
+    blood_type: Mapped[str] = mapped_column()
+    blood_pressure: Mapped[str] = mapped_column()
+    past_medicine: Mapped[str] = mapped_column()
+    
 class Reminder(db.Model):
     id: Mapped[int] = mapped_column(primary_key=True)
     user_id: Mapped[int] = mapped_column(ForeignKey("user.id"))
