@@ -5,7 +5,30 @@
 {% endblock %}
 
 {% block content %}
-    <h1>Name: {{user.fname}} {{user.lname}}</h1>
-    <h1>Email: {{user.email}}</h1>
-    <h1>Type: {{user.user_type}}</h1>
+<h1>Welcome, {{user.fname}} {{user.lname}}</h1>
+    <h2> ({{ user.email }})</h2>
+    <br>
+<form class='profile-form'>
+    <h2>Your Data</h2>
+    ------------------------------------
+    <br>
+    Height: {{user.height}}
+    <br>
+    Weight: {{user.weight}}
+    <br>
+    Allergies: {{user.allergies}}
+    <br>
+    Blood Type: {{user.blood_type}}
+    <br>
+    Blood Pressure: {{user.blood_pressure}}
+    <br>
+    Past Medicine: {{user.past_medicine}}
+</form>
+<br>
+<br>
+<br>
+    {% with title='Update Data' %}
+    {% include 'profile_form.html' %}
+    {% endwith %}
+
 {% endblock %}

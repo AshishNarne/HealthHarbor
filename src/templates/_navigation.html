@@ -2,12 +2,12 @@
     <ul>
         <li><a href="{{ url_for('pages.home') }}">Home</a></li>
         <li><a href="{{ url_for('pages.about') }}">About</a></li>
-        
+
         {% if not current_user.is_authenticated %}
             <li><a href="{{ url_for('pages.login') }}">Login</a></li>
             <li><a href="{{ url_for('pages.signup') }}">Signup</a></li>
         {% endif %}
-        
+
         {% if current_user.is_authenticated %}
             {% if current_user.user_type == 'doctor' %}
                 <li><a href="{{ url_for('pages.add_patient') }}">Add a Patient</a></li>
