@@ -18,7 +18,7 @@ class User(UserMixin, db.Model):
     user_type: Mapped[str] = mapped_column()
     reminders: Mapped[list['Reminder']] = relationship(back_populates='user')
     __mapper_args__ = {
-        'polymorphic_identity': 'employee',
+        'polymorphic_identity': 'user',
         'polymorphic_on': 'user_type',
     }
 
@@ -45,12 +45,12 @@ class Patient(User):
         'polymorphic_identity': 'patient',
     }
 
-    height: Mapped[str] = mapped_column()
-    weight: Mapped[str] = mapped_column()
-    allergies: Mapped[str] = mapped_column()
-    blood_type: Mapped[str] = mapped_column()
-    blood_pressure: Mapped[str] = mapped_column()
-    past_medicine: Mapped[str] = mapped_column()
+    height: Mapped[str] = mapped_column(nullable=True)
+    weight: Mapped[str] = mapped_column(nullable=True)
+    allergies: Mapped[str] = mapped_column(nullable=True)
+    blood_type: Mapped[str] = mapped_column(nullable=True)
+    blood_pressure: Mapped[str] = mapped_column(nullable=True)
+    past_medicine: Mapped[str] = mapped_column(nullable=True)
 
 class Reminder(db.Model):
     id: Mapped[int] = mapped_column(primary_key=True)
