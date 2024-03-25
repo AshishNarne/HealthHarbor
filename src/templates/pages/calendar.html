@@ -29,9 +29,11 @@
                 </div>
                 {% for reminder in reminders_by_weekday[i] %}
                     <ul class='reminder'>
-                        <form action="{{ url_for('pages.delete_reminder', reminder_id=reminder.id, week=week) }}" method=post>
-                            <button>delete</button>
-                        </form>
+                        {% if not patient %}
+                            <form action="{{ url_for('pages.delete_reminder', reminder_id=reminder.id, week=week) }}" method=post>
+                                <button>delete</button>
+                            </form>
+                        {% endif %}
                         <li class='reminder-title'>{{reminder.title}}</li>
                         {% if patient %}
                             <li>with Dr. {{reminder.doctor.fname}} {{reminder.doctor.lname}}</li>

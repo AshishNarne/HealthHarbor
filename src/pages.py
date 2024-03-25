@@ -181,7 +181,10 @@ def calendar():
     )
 
 @bp.route('/delete-reminder', methods=['POST'])
+@login_required
 def delete_reminder():
+    if current_user.user_type != "doctor":
+        return render_template('pages/forbidden.html'), 403
     week = int(request.args.get('week'))
     reminder_id = int(request.args.get('reminder_id'))
     Reminder.query.filter_by(id=reminder_id).delete()
