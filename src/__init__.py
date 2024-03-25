@@ -6,7 +6,7 @@ from flask_login import LoginManager
 db = SQLAlchemy()
 
 from . import pages
-from .models import User, Reminder
+from .models import User
 
 
 def create_app():

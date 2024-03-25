@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    Add a Patient
+{% endblock %}
+
+{% block content %}
+    {% with title='Add a Patient' %}
+        {% include 'search_patient_form.html' %}
+    {% endwith %}
+    <ul class="login-form">
+        {% for patient in patients %}
+            <li>
+                <form action="{{ url_for('pages.request_patient' ) }}" method=post>
+                    <input type='hidden' name='patient_id' value='{{patient.id}}'>
+                    <input type='hidden' name='doctor_id' value='{{current_user.id}}'>
+                    <button>
+                        {{patient.lname}}, {{patient.fname}} ({{patient.email}})
+                    </button>
+                </form>
+            </li>
+        {% endfor %}
+    </ul>
+{% endblock %}

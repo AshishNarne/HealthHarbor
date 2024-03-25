@@ -9,6 +9,10 @@
         {% endif %}
 
         {% if current_user.is_authenticated %}
+            {% if current_user.user_type == 'doctor' %}
+                <li><a href="{{ url_for('pages.add_patient') }}">Add a Patient</a></li>
+                <li><a href="{{ url_for('pages.add_reminder') }}">Add a Reminder</a></li>
+            {% endif %}
             <li><a href="{{ url_for('pages.calendar') }}">Calendar</a></li>
             <li><a href="{{ url_for('pages.profile') }}">Profile</a></li>
             <li><a href="{{ url_for('pages.logout') }}">Logout</a></li>
