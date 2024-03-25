@@ -5,13 +5,15 @@ from flask_login import LoginManager
 
 db = SQLAlchemy()
 
-from . import pages
+from . import account_pages
+from . import calendar_pages
 from .models import User
 
 
 def create_app():
     app = Flask(__name__)
-    app.register_blueprint(pages.bp)
+    app.register_blueprint(account_pages.bp)
+    app.register_blueprint(calendar_pages.bp)
 
     # .env
     # import environment variables
@@ -26,7 +28,7 @@ def create_app():
 
     # flask-login
     login_manager = LoginManager()
-    login_manager.login_view = "pages.login"
+    login_manager.login_view = "account_pages.login"
     login_manager.init_app(app)
 
     @login_manager.user_loader
