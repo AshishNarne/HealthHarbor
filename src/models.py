@@ -1,6 +1,5 @@
 from flask_login import UserMixin
 from datetime import datetime
-from enum import Enum, auto
 from sqlalchemy import ForeignKey
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from . import db

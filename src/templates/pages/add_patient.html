@@ -11,7 +11,7 @@
     <ul class="login-form">
         {% for patient in patients %}
             <li>
-                <form action="{{ url_for('pages.request_patient' ) }}" method=post>
+                <form action="{{ url_for( 'calendar_pages.request_patient' ) }}" method=post>
                     <input type='hidden' name='patient_id' value='{{patient.id}}'>
                     <input type='hidden' name='doctor_id' value='{{current_user.id}}'>
                     <button>
