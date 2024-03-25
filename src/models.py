@@ -6,7 +6,6 @@ from sqlalchemy.orm import Mapped, mapped_column, relationship
 from . import db
 
 
-
 class User(UserMixin, db.Model):
     # id is just an autoincrementing(?) integer (1, 2, 3, ...) that uniquely identifies a user
     id: Mapped[int] = mapped_column(primary_key=True)
@@ -17,34 +16,39 @@ class User(UserMixin, db.Model):
     pwd_hash: Mapped[str] = mapped_column()
     user_type: Mapped[str] = mapped_column()
     __mapper_args__ = {
-        'polymorphic_identity': 'user',
-        'polymorphic_on': 'user_type',
+        "polymorphic_identity": "user",
+        "polymorphic_on": "user_type",
     }
 
+
 class DoctorPatient(db.Model):
-    __tablename__ = 'doctor_patient'
+    __tablename__ = "doctor_patient"
 
     id: Mapped[int] = mapped_column(primary_key=True)
-    patient_id: Mapped[int] = mapped_column(ForeignKey('patient.id'))
-    doctor_id: Mapped[int] = mapped_column(ForeignKey('doctor.id'))
+    patient_id: Mapped[int] = mapped_column(ForeignKey("patient.id"))
+    doctor_id: Mapped[int] = mapped_column(ForeignKey("doctor.id"))
 
 
 class Doctor(User):
-    id: Mapped[int] = mapped_column(ForeignKey('user.id'), primary_key=True)
-    patients: Mapped[list['Patient']] = relationship(secondary='doctor_patient', back_populates='doctors')
+    id: Mapped[int] = mapped_column(ForeignKey("user.id"), primary_key=True)
+    patients: Mapped[list["Patient"]] = relationship(
+        secondary="doctor_patient", back_populates="doctors"
+    )
     __mapper_args__ = {
-        'polymorphic_identity': 'doctor',
+        "polymorphic_identity": "doctor",
     }
-    reminders: Mapped[list['Reminder']] = relationship(back_populates='doctor')
+    reminders: Mapped[list["Reminder"]] = relationship(back_populates="doctor")
 
 
 class Patient(User):
-    id: Mapped[int] = mapped_column(ForeignKey('user.id'), primary_key=True)
-    doctors: Mapped[list['Doctor']] = relationship(secondary='doctor_patient', back_populates='patients')
+    id: Mapped[int] = mapped_column(ForeignKey("user.id"), primary_key=True)
+    doctors: Mapped[list["Doctor"]] = relationship(
+        secondary="doctor_patient", back_populates="patients"
+    )
     __mapper_args__ = {
-        'polymorphic_identity': 'patient',
+        "polymorphic_identity": "patient",
     }
-    reminders: Mapped[list['Reminder']] = relationship(back_populates='patient')
+    reminders: Mapped[list["Reminder"]] = relationship(back_populates="patient")
 
     height: Mapped[str] = mapped_column(nullable=True)
     weight: Mapped[str] = mapped_column(nullable=True)
@@ -52,6 +56,7 @@ class Patient(User):
     blood_type: Mapped[str] = mapped_column(nullable=True)
     blood_pressure: Mapped[str] = mapped_column(nullable=True)
     past_medicine: Mapped[str] = mapped_column(nullable=True)
+
 
 class Reminder(db.Model):
     id: Mapped[int] = mapped_column(primary_key=True)

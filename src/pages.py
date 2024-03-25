@@ -50,11 +50,11 @@ def signup():
 
 @bp.route("/signup", methods=["POST"])
 def signup_post():
-    email = request.form.get('email')
-    fname = request.form.get('fname')
-    lname = request.form.get('lname')
-    pwd = request.form.get('pwd')
-    doctor = request.form.get('doctor')
+    email = request.form.get("email")
+    fname = request.form.get("fname")
+    lname = request.form.get("lname")
+    pwd = request.form.get("pwd")
+    doctor = request.form.get("doctor")
 
     # look for an existing user
     user = User.query.filter_by(email=email).first()
@@ -69,7 +69,9 @@ def signup_post():
 
     # create a new user with the form data. Hash the password so the plaintext version isn't saved.
     user_type = Doctor if doctor else Patient
-    new_user = user_type(email=email, fname=fname, lname=lname, pwd_hash=generate_password_hash(pwd))
+    new_user = user_type(
+        email=email, fname=fname, lname=lname, pwd_hash=generate_password_hash(pwd)
+    )
 
     # add the new user to the database
     db.session.add(new_user)
@@ -81,21 +83,31 @@ def signup_post():
 @bp.route("/profile")
 @login_required
 def profile():
-    return render_template('pages/profile.html', user=current_user)
-@bp.route('/profile', methods=['POST'])
+    return render_template("pages/profile.html", user=current_user)
+
+
+@bp.route("/profile", methods=["POST"])
 @login_required
 def profile_post():
     user = current_user
-    user.height = request.form.get('height')
-    user.weight = request.form.get('weight')
-    user.allergies = request.form.get('allergies')
-    user.blood_type = request.form.get('blood_type')
-    user.blood_pressure = request.form.get('blood_pressure')
-    user.past_medicine = request.form.get('past_medicine')
+    user.height = request.form.get("height")
+    user.weight = request.form.get("weight")
+    user.allergies = request.form.get("allergies")
+    user.blood_type = request.form.get("blood_type")
+    user.blood_pressure = request.form.get("blood_pressure")
+    user.past_medicine = request.form.get("past_medicine")
     db.session.commit()
-    return render_template('pages/profile.html', user=current_user, height=user.height, weight=user.weight,
-                           allergies=user.allergies, blood_type=user.blood_type, blood_pressure=user.blood_pressure,
-                           past_medicine=user.past_medicine)
+    return render_template(
+        "pages/profile.html",
+        user=current_user,
+        height=user.height,
+        weight=user.weight,
+        allergies=user.allergies,
+        blood_type=user.blood_type,
+        blood_pressure=user.blood_pressure,
+        past_medicine=user.past_medicine,
+    )
+
 
 @bp.route("/logout")
 @login_required
@@ -127,18 +139,20 @@ def process_reminders(
         reminders_by_weekday[reminder.timestamp.weekday()].append(reminder)
     return reminders_by_weekday
 
+
 @bp.route("/add-reminder")
 @login_required
 def add_reminder():
     if current_user.user_type != "doctor":
-        return render_template('pages/forbidden.html'), 403
+        return render_template("pages/forbidden.html"), 403
     return render_template("pages/add_reminder.html")
+
 
 @bp.route("/add-reminder", methods=["POST"])
 @login_required
 def add_reminder_post():
-    if current_user.user_type != 'doctor':
-        return render_template('pages/forbidden.html'), 403
+    if current_user.user_type != "doctor":
+        return render_template("pages/forbidden.html"), 403
     patient_id = request.form.get("patient")
     date = request.form.get("date")
     time = request.form.get("time")
@@ -149,11 +163,16 @@ def add_reminder_post():
     print(timestamp)
 
     new_reminder = Reminder(
-        timestamp=timestamp, title=title, desc=desc, doctor_id=current_user.id, patient_id=patient_id,
+        timestamp=timestamp,
+        title=title,
+        desc=desc,
+        doctor_id=current_user.id,
+        patient_id=patient_id,
     )
     db.session.add(new_reminder)
     db.session.commit()
-    return redirect(url_for('pages.calendar', week=0))
+    return redirect(url_for("pages.calendar", week=0))
+
 
 @bp.route("/calendar")
 @login_required
@@ -180,33 +199,38 @@ def calendar():
         patient=current_user.user_type == "patient",
     )
 
-@bp.route('/delete-reminder', methods=['POST'])
+
+@bp.route("/delete-reminder", methods=["POST"])
 @login_required
 def delete_reminder():
     if current_user.user_type != "doctor":
-        return render_template('pages/forbidden.html'), 403
-    week = int(request.args.get('week'))
-    reminder_id = int(request.args.get('reminder_id'))
+        return render_template("pages/forbidden.html"), 403
+    week = int(request.args.get("week"))
+    reminder_id = int(request.args.get("reminder_id"))
     Reminder.query.filter_by(id=reminder_id).delete()
     db.session.commit()
-    return redirect(url_for('pages.calendar', week=week))
+    return redirect(url_for("pages.calendar", week=week))
 
-@bp.route('/add-patient', methods=['GET', 'POST'])
+
+@bp.route("/add-patient", methods=["GET", "POST"])
 def add_patient():
-    if current_user.user_type != 'doctor':
-        return render_template('pages/forbidden.html'), 403
+    if current_user.user_type != "doctor":
+        return render_template("pages/forbidden.html"), 403
     patients = []
-    input_name = request.form.get('name')
+    input_name = request.form.get("name")
     if input_name is not None:
-        patients = Patient.query.filter((Patient.fname + ' ' + Patient.lname).like(input_name + '%')).all()
-    return render_template('pages/add_patient.html', patients=patients)
+        patients = Patient.query.filter(
+            (Patient.fname + " " + Patient.lname).like(input_name + "%")
+        ).all()
+    return render_template("pages/add_patient.html", patients=patients)
 
-@bp.route('/request-patient', methods=['POST'])
+
+@bp.route("/request-patient", methods=["POST"])
 def request_patient():
-    patient_id = int(request.form.get('patient_id'))
-    doctor_id = int(request.form.get('doctor_id'))
+    patient_id = int(request.form.get("patient_id"))
+    doctor_id = int(request.form.get("doctor_id"))
     patient = Patient.query.get(patient_id)
     doctor = Doctor.query.get(doctor_id)
     doctor.patients.append(patient)
     db.session.commit()
-    return redirect(url_for('pages.home'))
+    return redirect(url_for("pages.home"))
