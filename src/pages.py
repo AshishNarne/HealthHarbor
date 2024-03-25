@@ -127,6 +127,33 @@ def process_reminders(
         reminders_by_weekday[reminder.timestamp.weekday()].append(reminder)
     return reminders_by_weekday
 
+@bp.route("/add-reminder")
+@login_required
+def add_reminder():
+    if current_user.user_type != "doctor":
+        return render_template('pages/forbidden.html'), 403
+    return render_template("pages/add_reminder.html")
+
+@bp.route("/add-reminder", methods=["POST"])
+@login_required
+def add_reminder_post():
+    if current_user.user_type != 'doctor':
+        return render_template('pages/forbidden.html'), 403
+    patient_id = request.form.get("patient")
+    date = request.form.get("date")
+    time = request.form.get("time")
+    title = request.form.get("title")
+    desc = request.form.get("desc")
+    print(f"Adding reminder {patient_id, date, time, title, desc}")
+    timestamp = datetime.datetime.strptime(f"{date} {time}", "%Y-%m-%d %H:%M")
+    print(timestamp)
+
+    new_reminder = Reminder(
+        timestamp=timestamp, title=title, desc=desc, doctor_id=current_user.id, patient_id=patient_id,
+    )
+    db.session.add(new_reminder)
+    db.session.commit()
+    return redirect(url_for('pages.calendar', week=0))
 
 @bp.route("/calendar")
 @login_required
@@ -150,33 +177,14 @@ def calendar():
         dates=dates,
         month_str=month_str,
         week=week,
+        patient=current_user.user_type == "patient",
     )
-
-
-@bp.route("/calendar", methods=["POST"])
-@login_required
-def calendar_post():
-    date = request.form.get("date")
-    time = request.form.get("time")
-    title = request.form.get("title")
-    desc = request.form.get("desc")
-    print(f"Adding reminder {date, time, title, desc}")
-    timestamp = datetime.datetime.strptime(f"{date} {time}", "%Y-%m-%d %H:%M")
-    print(timestamp)
-
-    new_reminder = Reminder(
-        timestamp=timestamp, title=title, desc=desc, user_id=current_user.id
-    )
-    db.session.add(new_reminder)
-    db.session.commit()
-
-    return redirect(url_for('pages.calendar'))
 
 @bp.route('/delete-reminder', methods=['POST'])
 def delete_reminder():
     week = int(request.args.get('week'))
     reminder_id = int(request.args.get('reminder_id'))
-    Reminder.query.get(reminder_id).delete()
+    Reminder.query.filter_by(id=reminder_id).delete()
     db.session.commit()
     return redirect(url_for('pages.calendar', week=week))
 

@@ -2,6 +2,16 @@
 
 {% block form_content %}
     <div>
+        <label for="patient">Patient</label>
+        <select name="patient" required>
+            {% for patient in patients %}
+                <option value="{{patient.id}}">
+                    {{patient.lname}}, {{patient.fname}} ({{patient.email}})
+                </option>
+            {% endfor %}
+        </select>
+    </div>
+    <div>
         <label for='date'>Date</label>
         <input name='date' type='date' required/>
     </div>

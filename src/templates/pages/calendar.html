@@ -5,9 +5,6 @@
 {% endblock %}
 
 {% block content %}
-    {% with title='Add a Reminder' %}
-        {% include 'add_reminder_form.html' %}
-    {% endwith %}
     <a href='{{url_for("pages.calendar", week=week - 1 ) }}'>
         <button>
             <<
@@ -36,8 +33,13 @@
                             <button>delete</button>
                         </form>
                         <li class='reminder-title'>{{reminder.title}}</li>
+                        {% if patient %}
+                            <li>with Dr. {{reminder.doctor.fname}} {{reminder.doctor.lname}}</li>
+                        {% else %}
+                            <li>with {{reminder.patient.fname}} {{reminder.patient.lname}}</li>
+                        {% endif %}
                         <li>{{reminder.timestamp.strftime('%I:%M %p')}}</li>
-                        <li class='reminder-desc'>{{reminder.desc}}</li>
+                        <li>{{reminder.desc}}</li>
                     </ul>
                 {% endfor %}
             </div>

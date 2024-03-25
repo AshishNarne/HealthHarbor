@@ -81,6 +81,10 @@ nav a {
     border-radius: 1rem;
 }
 
+.login-form > * {
+    margin: .5rem;
+}
+
 .profile-form {
     width: 33%;
     flex-direction: column;
@@ -91,10 +95,6 @@ nav a {
 
 .flashed-messages {
     background-color: red;
-}
-
-.login-form > * {
-    margin: .5rem;
 }
 
 .calendar {

@@ -8,14 +8,14 @@
     {% with title='Add a Patient' %}
         {% include 'search_patient_form.html' %}
     {% endwith %}
-    <ul>
+    <ul class="login-form">
         {% for patient in patients %}
             <li>
                 <form action="{{ url_for('pages.request_patient' ) }}" method=post>
                     <input type='hidden' name='patient_id' value='{{patient.id}}'>
                     <input type='hidden' name='doctor_id' value='{{current_user.id}}'>
                     <button>
-                        {{patient.fname}} {{patient.lname}} {{patient.email}}
+                        {{patient.lname}}, {{patient.fname}} ({{patient.email}})
                     </button>
                 </form>
             </li>

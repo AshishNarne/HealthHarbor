@@ -16,7 +16,6 @@ class User(UserMixin, db.Model):
     lname: Mapped[str] = mapped_column()
     pwd_hash: Mapped[str] = mapped_column()
     user_type: Mapped[str] = mapped_column()
-    reminders: Mapped[list['Reminder']] = relationship(back_populates='user')
     __mapper_args__ = {
         'polymorphic_identity': 'user',
         'polymorphic_on': 'user_type',
@@ -36,6 +35,7 @@ class Doctor(User):
     __mapper_args__ = {
         'polymorphic_identity': 'doctor',
     }
+    reminders: Mapped[list['Reminder']] = relationship(back_populates='doctor')
 
 
 class Patient(User):
@@ -44,6 +44,7 @@ class Patient(User):
     __mapper_args__ = {
         'polymorphic_identity': 'patient',
     }
+    reminders: Mapped[list['Reminder']] = relationship(back_populates='patient')
 
     height: Mapped[str] = mapped_column(nullable=True)
     weight: Mapped[str] = mapped_column(nullable=True)
@@ -54,8 +55,10 @@ class Patient(User):
 
 class Reminder(db.Model):
     id: Mapped[int] = mapped_column(primary_key=True)
-    user_id: Mapped[int] = mapped_column(ForeignKey("user.id"))
-    user: Mapped["User"] = relationship(back_populates="reminders")
+    patient_id: Mapped[int] = mapped_column(ForeignKey("patient.id"))
+    patient: Mapped["Patient"] = relationship(back_populates="reminders")
+    doctor_id: Mapped[int] = mapped_column(ForeignKey("doctor.id"))
+    doctor: Mapped["Doctor"] = relationship(back_populates="reminders")
     timestamp: Mapped[datetime] = mapped_column()
     title: Mapped[str] = mapped_column()
     desc: Mapped[str] = mapped_column()
