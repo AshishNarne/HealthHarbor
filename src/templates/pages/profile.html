@@ -5,33 +5,35 @@
 {% endblock %}
 
 {% block content %}
-<h1>Welcome, {{user.fname}} {{user.lname}}</h1>
+    <h1>Welcome, {{user.fname}} {{user.lname}}</h1>
     <h2>({{ user.email }})</h2>
     <br>
-{% if user.user_type == 'patient'%}
 
-    <form class='profile-form'>
-        <h2>Your Data</h2>
-        ------------------------------------
+    {% if user.user_type == 'patient'%}
+        <form class='profile-form'>
+            <h2>Your Data</h2>
+            ------------------------------------
+            <br>
+            Height: {{user.height}}
+            <br>
+            Weight: {{user.weight}}
+            <br>
+            Allergies: {{user.allergies}}
+            <br>
+            Blood Type: {{user.blood_type}}
+            <br>
+            Blood Pressure: {{user.blood_pressure}}
+            <br>
+            Past Medicine: {{user.past_medicine}}
+        </form>
         <br>
-        Height: {{user.height}}
         <br>
-        Weight: {{user.weight}}
         <br>
-        Allergies: {{user.allergies}}
-        <br>
-        Blood Type: {{user.blood_type}}
-        <br>
-        Blood Pressure: {{user.blood_pressure}}
-        <br>
-        Past Medicine: {{user.past_medicine}}
-    </form>
-    <br>
-    <br>
-    <br>
-        {% with title='Update Data' %}
-            {% include 'profile_form.html' %}
-        {% endwith %}
-{% endif %}
+            {% with title='Update Data' %}
+                {% include 'profile_form.html' %}
+            {% endwith %}
+    {% endif %}
+
+    {% include 'delete_account_form.html'   %}
 
 {% endblock %}
