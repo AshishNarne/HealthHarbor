@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, request, redirect, url_for, flash
+from flask import Blueprint, render_template, request, redirect, url_for, flash, session
 from markupsafe import Markup
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import login_user, logout_user, login_required, current_user
@@ -40,6 +40,37 @@ def login_post():
     print(f"{user = } logging in")
     login_user(user, remember=remember)
     return render_template("pages/home.html")
+
+@bp.route("/verify_email")
+def verify_email():
+    return render_template("pages/verify_email.html")
+
+@bp.route("/verify_email", methods=["POST"])
+def verify_email_post():
+    email = request.form.get("email")
+    session["email"] = email
+
+    user = User.query.filter_by(email=email).first()
+    if not user:
+        # maybe we shouldn't tell the user this
+        flash("Not an existing email")
+        return redirect(url_for("account_pages.verify_email"))
+
+    return redirect(url_for("account_pages.change_password",email=email))
+@bp.route("/change_password")
+def change_password():
+    return render_template("pages/change_password.html")
+
+@bp.route("/change_password", methods=["POST"])
+def change_password_post():
+    email = session.get("email")
+    pwd = request.form.get("pwd")
+
+    user = User.query.filter_by(email=email).first()
+    user.pwd_hash = generate_password_hash(pwd)
+    db.session.commit()
+
+    return redirect(url_for("account_pages.login"))
 
 
 @bp.route("/signup")
