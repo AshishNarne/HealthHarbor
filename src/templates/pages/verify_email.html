@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    Verify Email
+{% endblock %}
+
+{% block content %}
+    {% with title='Please Enter Your Email' %}
+        {% include 'verify_email_form.html' %}
+    {% endwith %}
+{% endblock %}
