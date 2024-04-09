@@ -2,7 +2,7 @@ from flask import Blueprint, render_template, request, redirect, url_for, flash,
 from markupsafe import Markup
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import login_user, logout_user, login_required, current_user
-from .models import User, Doctor, Patient
+from .models import User, Doctor, Patient, Reminder, DoctorPatient
 from . import db
 
 bp = Blueprint("account_pages", __name__)
@@ -119,24 +119,41 @@ def profile():
 @bp.route("/profile", methods=["POST"])
 @login_required
 def profile_post():
-    user = current_user
-    user.height = request.form.get("height")
-    user.weight = request.form.get("weight")
-    user.allergies = request.form.get("allergies")
-    user.blood_type = request.form.get("blood_type")
-    user.blood_pressure = request.form.get("blood_pressure")
-    user.past_medicine = request.form.get("past_medicine")
-    db.session.commit()
-    return render_template(
-        "pages/profile.html",
-        user=current_user,
-        height=user.height,
-        weight=user.weight,
-        allergies=user.allergies,
-        blood_type=user.blood_type,
-        blood_pressure=user.blood_pressure,
-        past_medicine=user.past_medicine,
-    )
+    print(f'form: {request.form}')
+    if "delete-account-submit" in request.form:
+        user_id = current_user.id
+        logout_user()
+        patient_exists = Patient.query.filter_by(id=user_id).first()
+        User.query.filter_by(id=user_id).delete()
+        if patient_exists:
+            Patient.query.filter_by(id=user_id).delete()
+            Reminder.query.filter_by(patient_id=user_id).delete()
+            DoctorPatient.query.filter_by(patient_id=user_id).delete()
+        else:
+            Doctor.query.filter_by(id=user_id).delete()
+            Reminder.query.filter_by(doctor_id=user_id).delete()
+            DoctorPatient.query.filter_by(doctor_id=user_id).delete()
+        db.session.commit()
+        return redirect(url_for("account_pages.home"))
+    else:
+        user = current_user
+        user.height = request.form.get("height")
+        user.weight = request.form.get("weight")
+        user.allergies = request.form.get("allergies")
+        user.blood_type = request.form.get("blood_type")
+        user.blood_pressure = request.form.get("blood_pressure")
+        user.past_medicine = request.form.get("past_medicine")
+        db.session.commit()
+        return render_template(
+            "pages/profile.html",
+            user=current_user,
+            height=user.height,
+            weight=user.weight,
+            allergies=user.allergies,
+            blood_type=user.blood_type,
+            blood_pressure=user.blood_pressure,
+            past_medicine=user.past_medicine,
+        )
 
 
 @bp.route("/logout")
