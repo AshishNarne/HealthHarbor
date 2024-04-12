@@ -6,6 +6,7 @@ from . import db
 
 bp = Blueprint("calendar_pages", __name__)
 
+
 def build_month_str(date1: datetime.date, date2: datetime.date) -> str:
     month_str = date2.strftime("%b %Y")
     if date1.month != date2.month:
@@ -62,6 +63,58 @@ def add_reminder_post():
     db.session.add(new_reminder)
     db.session.commit()
     return redirect(url_for("calendar_pages.calendar", week=0))
+
+
+@bp.route("/add-repeating-reminder")
+@login_required
+def add_repeating_reminder():
+    if current_user.user_type != "doctor":
+        return render_template("pages/forbidden.html"), 403
+    return render_template("pages/add_repeating_reminder.html")
+
+
+def create_repeating_reminder(desired_days, end_date, title, desc, patient_id, time):
+    today = datetime.datetime.today()
+    this_monday = today - datetime.timedelta(days=today.weekday())
+    week = 0
+    while True:
+        for desired_day in desired_days:
+            reminder_datetime = this_monday + datetime.timedelta(
+                weeks=week, days=desired_day, hours=time.hour, minutes=time.minute
+            )
+            if reminder_datetime < datetime.datetime.now():
+                continue
+            if reminder_datetime > end_date + datetime.timedelta(days=1):
+                return
+            new_reminder = Reminder(
+                timestamp=reminder_datetime,
+                title=title,
+                desc=desc,
+                doctor_id=current_user.id,
+                patient_id=patient_id,
+            )
+            db.session.add(new_reminder)
+        week += 1
+
+
+@bp.route("/add-repeating-reminder", methods=["POST"])
+@login_required
+def add_repeating_reminder_post():
+    if current_user.user_type != "doctor":
+        return render_template("pages/forbidden.html"), 403
+    patient_id = request.form.get("patient")
+    end_date = datetime.datetime.strptime(request.form.get("date"), "%Y-%m-%d")
+    desired_days = []
+    for i, weekday in enumerate(["m", "t", "w", "r", "f", "s", "u"]):
+        if request.form.get(weekday):
+            desired_days.append(i)
+    print(f"{desired_days = }")
+    time = datetime.datetime.strptime(request.form.get("time"), "%H:%M")
+    title = request.form.get("title")
+    desc = request.form.get("desc")
+    create_repeating_reminder(desired_days, end_date, title, desc, patient_id, time)
+    db.session.commit()
+    return redirect(url_for("calendar_pages.calendar"))
 
 
 @bp.route("/calendar")
