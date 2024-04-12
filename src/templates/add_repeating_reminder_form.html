@@ -1,0 +1,63 @@
+{% extends '_form.html' %}
+
+{% block form_content %}
+    <div>
+        <label for="patient">Patient</label>
+        <select name="patient" required>
+            {% for patient in patients %}
+                <option value="{{patient.id}}">
+                    {{patient.lname}}, {{patient.fname}} ({{patient.email}})
+                </option>
+            {% endfor %}
+        </select>
+    </div>
+    <div>
+        <ul class="weekday-list">
+            <li>
+                <input type="checkbox" name="m" value="m"/>
+                <label for="m">Monday</label>
+            </li>
+            <li>
+                <input type="checkbox" name="t" value="t"/>
+                <label for="t">Tuesday</label>
+            </li>
+            <li>
+                <input type="checkbox" name="w" value="w"/>
+                <label for="w">Wednesday</label>
+            </li>
+            <li>
+                <input type="checkbox" name="r" value="r"/>
+                <label for="r">Thursday</label>
+            </li>
+            <li>
+                <input type="checkbox" name="f" value="f"/>
+                <label for="f">Friday</label>
+            </li>
+            <li>
+                <input type="checkbox" name="s" value="s"/>
+                <label for="s">Saturday</label>
+            </li>
+            <li>
+                <input type="checkbox" name="u" value="u"/>
+                <label for="u">Sunday</label>
+            </li>
+        </ul>
+    </div>
+    <div>
+        <label for='date'>End Date</label>
+        <input name='date' type='date' required/>
+    </div>
+    <div>
+        <label for='time'>Time</label>
+        <input name='time' type='time' required/>
+    </div>
+    <div>
+        <label for='title'>Title</label>
+        <input name='title' type='text' placeholder='Title' required/>
+    </div>
+    <div>
+        <label for='desc'>Description</label>
+        <input name='desc' type='text' placeholder='Description'/>
+    </div>
+    <button>Add Reminder</button>
+{% endblock %}

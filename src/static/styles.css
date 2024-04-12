@@ -131,3 +131,7 @@ nav a {
 .month {
     font-size: 2em;
 }
+
+.weekday-list {
+    list-style-type: none;
+}

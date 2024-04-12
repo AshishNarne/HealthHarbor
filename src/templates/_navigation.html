@@ -12,6 +12,7 @@
             {% if current_user.user_type == 'doctor' %}
                 <li><a href="{{ url_for('calendar_pages.add_patient') }}">Add a Patient</a></li>
                 <li><a href="{{ url_for('calendar_pages.add_reminder') }}">Add a Reminder</a></li>
+                <li><a href="{{ url_for('calendar_pages.add_repeating_reminder') }}">Add a Repeating Reminder</a></li>
             {% endif %}
             <li><a href="{{ url_for('calendar_pages.calendar') }}">Calendar</a></li>
             <li><a href="{{ url_for('account_pages.profile') }}">Profile</a></li>
