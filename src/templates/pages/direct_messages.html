@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    Direct Messages
+{% endblock %}
+
+{% block content %}
+    <section class="dm-section">
+        <form method="post">
+            <select name="dm-user-select" onchange="this.form.submit()">
+                <option hidden disabled
+                    {% if dm_other is none %}
+                        selected
+                    {% endif %}
+                > -- select an option -- </option>
+                {% for other_user in other_users %}
+                    <option value="{{other_user.id}}"
+                        {% if dm_other.id == other_user.id %}
+                            selected
+                        {% endif %}
+                    >
+                        {{other_user.fname}} {{other_user.lname}}
+                    </option>
+                {% endfor %}
+            </select>
+        </form>
+        <div class="dm-container">
+            <h3>{{dm_other.fname}} {{dm_other.lname}}</h3>
+            <ul class="dm-list">
+                {% for message in messages %}
+                    <li class="dm-message {{'right' if user.id == message.from_id else 'left'}}">
+                        {{message.content}}
+                    </li>
+                {% endfor %}
+            </ul>
+            <form method="post">
+                <input hidden name="other-user-id" value="{{dm_other.id}}"/>
+                <input name="send-dm-input" class="send-dm-input"/>
+                <input type="submit" style="display: none"/>
+            </form>
+        </div>
+    </section>
+{% endblock %}

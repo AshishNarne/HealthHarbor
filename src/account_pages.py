@@ -2,7 +2,7 @@ from flask import Blueprint, render_template, request, redirect, url_for, flash,
 from markupsafe import Markup
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import login_user, logout_user, login_required, current_user
-from .models import User, Doctor, Patient, Reminder, DoctorPatient
+from .models import User, Doctor, Patient, Reminder, DoctorPatient, Message
 from . import db
 
 bp = Blueprint("account_pages", __name__)
@@ -41,9 +41,11 @@ def login_post():
     login_user(user, remember=remember)
     return render_template("pages/home.html")
 
+
 @bp.route("/verify_email")
 def verify_email():
     return render_template("pages/verify_email.html")
+
 
 @bp.route("/verify_email", methods=["POST"])
 def verify_email_post():
@@ -56,10 +58,13 @@ def verify_email_post():
         flash("Not an existing email")
         return redirect(url_for("account_pages.verify_email"))
 
-    return redirect(url_for("account_pages.change_password",email=email))
+    return redirect(url_for("account_pages.change_password", email=email))
+
+
 @bp.route("/change_password")
 def change_password():
     return render_template("pages/change_password.html")
+
 
 @bp.route("/change_password", methods=["POST"])
 def change_password_post():
@@ -119,7 +124,7 @@ def profile():
 @bp.route("/profile", methods=["POST"])
 @login_required
 def profile_post():
-    print(f'form: {request.form}')
+    print(f"form: {request.form}")
     if "delete-account-submit" in request.form:
         user_id = current_user.id
         logout_user()
@@ -161,3 +166,41 @@ def profile_post():
 def logout():
     logout_user()
     return redirect(url_for("account_pages.home"))
+
+
+@bp.route("/direct-messages", methods=["GET", "POST"])
+@login_required
+def direct_messages():
+    other_id = request.form.get("dm-user-select")
+    if other_id is not None:
+        other_id = int(other_id)
+    if "send-dm-input" in request.form:
+        other_id = int(request.form.get("other-user-id"))
+        new_dm_content = request.form.get("send-dm-input")
+        new_message = Message(
+            from_id=current_user.id, to_id=other_id, content=new_dm_content
+        )
+        db.session.add(new_message)
+        db.session.commit()
+    other_user = None
+    messages = []
+    other_users = []
+    if current_user.user_type == "patient":
+        other_users = current_user.doctors
+    else:
+        other_users = current_user.patients
+    if other_id is not None:
+        other_id = int(other_id)
+        user_id = current_user.id
+        other_user = User.query.filter_by(id=other_id).first()
+        messages = Message.query.filter(
+            ((Message.from_id == user_id) & (Message.to_id == other_id))
+            | ((Message.from_id == other_id) & (Message.to_id == user_id))
+        )
+    return render_template(
+        "pages/direct_messages.html",
+        user=current_user,
+        dm_other=other_user,
+        messages=messages,
+        other_users=other_users,
+    )

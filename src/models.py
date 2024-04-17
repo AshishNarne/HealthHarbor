@@ -66,3 +66,10 @@ class Reminder(db.Model):
     timestamp: Mapped[datetime] = mapped_column()
     title: Mapped[str] = mapped_column()
     desc: Mapped[str] = mapped_column()
+
+
+class Message(db.Model):
+    id: Mapped[int] = mapped_column(primary_key=True)
+    from_id: Mapped[int] = mapped_column(ForeignKey("user.id"))
+    to_id: Mapped[int] = mapped_column(ForeignKey("user.id"))
+    content: Mapped[str] = mapped_column()
