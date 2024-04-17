@@ -173,3 +173,8 @@ nav a {
     margin-left: auto;
     margin-right: 1em;
 }
+
+.send-dm-input {
+    margin-top: 1em;
+    float: right;
+}
