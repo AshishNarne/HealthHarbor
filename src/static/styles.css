@@ -135,3 +135,41 @@ nav a {
 .weekday-list {
     list-style-type: none;
 }
+
+.dm-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.dm-container {
+    background-color: var(--clr-accent1);
+    width: 40%;
+    padding: 1em;
+    border-radius: .5em;
+}
+
+.dm-list {
+    list-style-type: none;
+    max-height: 25em;
+    overflow-y: auto;
+}
+
+.dm-message {
+    max-width: 40%;
+    padding: .5em;
+    border-radius: .5em;
+    margin: .2em 0;
+}
+
+.left {
+    background-color: var(--clr-accent2);
+    margin-left: 1em;
+    margin-right: auto;
+}
+
+.right {
+    background-color: var(--clr-accent3);
+    margin-left: auto;
+    margin-right: 1em;
+}
