@@ -5,11 +5,11 @@
 {% endblock %}
 
 {% block content %}
-    <h1>Welcome to HealthHarbor!</h1>
+<h1><span style="color: #009578;">Welcome to <strong style="text-shadow: 2px 2px 4px #666;">HealthHarbor</strong>!</span></h1>
     <br><br>
     <p>The HealthHarbor application seeks to simplify the appointment and prescritption process by connecting doctors and patients.</p>
     <br><br>
-    <h2>Utilities</h2>
+    <h2 style="color: #009578;">Utilities</h2>
     <ul>
         <li>Schedule and manage appointments.</li>
         <li>Request and assign prescriptions.</li>
@@ -18,14 +18,14 @@
         <li>Enable notifications to be reminded to take prescriptions.</li>
     </ul>
     <br><br>
-    <h2>About Us</h2>
+    <h2 style="color: #009578;">About Us</h2>
     <p>Learn more about our team and mission on the <a href="/about">About Us</a> page.</p>
     <br><br>
     {% if not current_user.is_authenticated %}
-        <h2>New Users</h2>
+        <h2 style="color: #009578;">New Users</h2>
         <p>Create a HealthHarbor account on the <a href="/signup">Signup</a> page.</p>
         <br><br>
-        <h2>Existing Users</h2>
+        <h2 style="color: #009578;">Existing Users</h2>
         <p>Login to your HealthHarbor account on the <a href="/login">Login</a> page.</p>
     {% endif %}
 {% endblock %}
