@@ -1,9 +1,19 @@
-from flask import Blueprint, render_template, request, redirect, url_for, flash, session
+from flask import (
+    Blueprint,
+    render_template,
+    request,
+    redirect,
+    url_for,
+    flash,
+    session,
+    current_app,
+)
 from markupsafe import Markup
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import login_user, logout_user, login_required, current_user
 from .models import User, Doctor, Patient, Reminder, DoctorPatient, Message
 from . import db
+from .email import send_email
 
 bp = Blueprint("account_pages", __name__)
 
@@ -100,6 +110,16 @@ def signup_post():
         flash(
             Markup(f"User already exists, go to the <a href={login_url}>login page</a>")
         )
+        return redirect(url_for("account_pages.signup"))
+
+    if not send_email(
+        current_app.config["GMAIL_ACCOUNT"],
+        current_app.config["GMAIL_PASSWORD"],
+        email,
+        "Welcome to HealthHarbor!",
+        "Thanks for signing up to HealthHarbor.",
+    ):
+        flash("Enter a valid email")
         return redirect(url_for("account_pages.signup"))
 
     # create a new user with the form data. Hash the password so the plaintext version isn't saved.

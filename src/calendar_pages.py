@@ -59,6 +59,7 @@ def add_reminder_post():
         desc=desc,
         doctor_id=current_user.id,
         patient_id=patient_id,
+        email_sent=False,
     )
     db.session.add(new_reminder)
     db.session.commit()
@@ -92,6 +93,7 @@ def create_repeating_reminder(desired_days, end_date, title, desc, patient_id, t
                 desc=desc,
                 doctor_id=current_user.id,
                 patient_id=patient_id,
+                email_sent=False,
             )
             db.session.add(new_reminder)
         week += 1

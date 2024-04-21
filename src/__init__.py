@@ -2,12 +2,15 @@ from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from dotenv import load_dotenv
 from flask_login import LoginManager
+import atexit
+from flask_apscheduler import APScheduler
 
 db = SQLAlchemy()
 
 from . import account_pages
 from . import calendar_pages
 from .models import User
+from .email import send_email_notifications
 
 
 def create_app():
@@ -30,6 +33,19 @@ def create_app():
     login_manager = LoginManager()
     login_manager.login_view = "account_pages.login"
     login_manager.init_app(app)
+
+    scheduler = APScheduler()
+    scheduler.init_app(app)
+    account = app.config["GMAIL_ACCOUNT"]
+    password = app.config["GMAIL_PASSWORD"]
+    scheduler.add_job(
+        id="send-email-notifications",
+        func=lambda: send_email_notifications(account, password, app),
+        trigger="interval",
+        seconds=60,
+    )
+    scheduler.start()
+    atexit.register(lambda: scheduler.shutdown())
 
     @login_manager.user_loader
     def load_user(user_id):
