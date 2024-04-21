@@ -66,6 +66,7 @@ class Reminder(db.Model):
     timestamp: Mapped[datetime] = mapped_column()
     title: Mapped[str] = mapped_column()
     desc: Mapped[str] = mapped_column()
+    email_sent: Mapped[str] = mapped_column()
 
 
 class Message(db.Model):
