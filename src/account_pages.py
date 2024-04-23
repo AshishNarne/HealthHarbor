@@ -161,6 +161,7 @@ def profile_post():
         db.session.commit()
         return redirect(url_for("account_pages.home"))
     else:
+        # display the user's medical details
         user = current_user
         user.height = request.form.get("height")
         user.weight = request.form.get("weight")
@@ -204,6 +205,7 @@ def direct_messages():
         db.session.commit()
     other_user = None
     messages = []
+    # other_users will store all the users the current user could direct message
     other_users = []
     if current_user.user_type == "patient":
         other_users = current_user.doctors
@@ -213,6 +215,8 @@ def direct_messages():
         other_id = int(other_id)
         user_id = current_user.id
         other_user = User.query.filter_by(id=other_id).first()
+        # filter all messages that should be on screen
+        # so either from current user to other user or vice-versa
         messages = Message.query.filter(
             ((Message.from_id == user_id) & (Message.to_id == other_id))
             | ((Message.from_id == other_id) & (Message.to_id == user_id))
