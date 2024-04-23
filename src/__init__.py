@@ -34,6 +34,7 @@ def create_app():
     login_manager.login_view = "account_pages.login"
     login_manager.init_app(app)
 
+    # check to send email notications every 60 seconds
     scheduler = APScheduler()
     scheduler.init_app(app)
     account = app.config["GMAIL_ACCOUNT"]

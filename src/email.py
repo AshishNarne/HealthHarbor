@@ -7,7 +7,7 @@ from flask import current_app
 from .models import Reminder
 from . import db
 
-
+# send a single email from "send" to "receive"
 def send_email(send: str, password: str, receive: str, subject: str, body: str) -> bool:
     em = EmailMessage()
     em["From"] = send
@@ -25,6 +25,7 @@ def send_email(send: str, password: str, receive: str, subject: str, body: str) 
             return True
 
 
+# check database for email notifications that need to be sent
 def send_email_notifications(send: str, password: str, app):
     with app.app_context():
         reminders = Reminder.query.filter(
