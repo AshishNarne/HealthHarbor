@@ -33,11 +33,13 @@
                     </li>
                 {% endfor %}
             </ul>
-            <form method="post">
-                <input hidden name="other-user-id" value="{{dm_other.id}}"/>
-                <input name="send-dm-input" class="send-dm-input"/>
-                <input type="submit" style="display: none"/>
-            </form>
+            {% if dm_other is not none %}
+                <form method="post">
+                    <input hidden name="other-user-id" value="{{dm_other.id}}"/>
+                    <input name="send-dm-input" class="send-dm-input"/>
+                    <input type="submit" style="display: none"/>
+                </form>
+            {% endif %}
         </div>
     </section>
 {% endblock %}
