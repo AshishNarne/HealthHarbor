@@ -195,9 +195,11 @@ def direct_messages():
     other_id = request.form.get("dm-user-select")
     if other_id is not None:
         other_id = int(other_id)
+    # this means the post type is actually sending a dm
     if "send-dm-input" in request.form:
         other_id = int(request.form.get("other-user-id"))
         new_dm_content = request.form.get("send-dm-input")
+        # create new message and add it to the database
         new_message = Message(
             from_id=current_user.id, to_id=other_id, content=new_dm_content
         )
