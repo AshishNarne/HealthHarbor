@@ -12,7 +12,7 @@
                     {% if dm_other is none %}
                         selected
                     {% endif %}
-                > -- select an option -- </option>
+                > -- select user -- </option>
                 {% for other_user in other_users %}
                     <option value="{{other_user.id}}"
                         {% if dm_other.id == other_user.id %}

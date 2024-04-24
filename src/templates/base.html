@@ -13,12 +13,16 @@
 </head>
 <body>
     <header>
-        <h1>HealthHarbor</h1>
+        <h1><a href="{{ url_for('account_pages.home') }}">HealthHarbor</a></h1>
         {% include '_navigation.html' %}
     </header>
     <main>
         {% block content %}
         {% endblock %}
     </main>
+    <footer>
+        <p>&copy; 2024 HealthHarbor. All rights reserved.</p>
+        <p>Contact us at <a href="mailto:support@healthharbor.com">support@healthharbor.com</a>.</p>
+    </footer>
 </body>
 </html>

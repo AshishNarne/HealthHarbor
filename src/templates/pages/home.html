@@ -19,13 +19,13 @@
     </ul>
     <br><br>
     <h2 style="color: #009578;">About Us</h2>
-    <p>Learn more about our team and mission on the <a href="/about">About Us</a> page.</p>
+    <p>Learn more about our team and mission on the <a href="/about" style="color: #F0F8FF;">About Us</a> page.</p>
     <br><br>
     {% if not current_user.is_authenticated %}
         <h2 style="color: #009578;">New Users</h2>
-        <p>Create a HealthHarbor account on the <a href="/signup">Signup</a> page.</p>
+        <p>Create a HealthHarbor account on the <a href="/signup" style="color: #F0F8FF;">Signup</a> page.</p>
         <br><br>
         <h2 style="color: #009578;">Existing Users</h2>
-        <p>Login to your HealthHarbor account on the <a href="/login">Login</a> page.</p>
+        <p>Login to your HealthHarbor account on the <a href="/login" style="color: #F0F8FF;">Login</a> page.</p>
     {% endif %}
 {% endblock %}

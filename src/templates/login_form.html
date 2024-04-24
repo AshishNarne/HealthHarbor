@@ -1,18 +1,17 @@
 {% extends '_form.html' %}
 
 {% block form_content %}
+<h1 class="login-title">Login</h1>
     <div>
-        <label for='email'>Email</label>
-        <input name='email' type='text' placeholder='Email'/>
+        <input name='email' type='text' placeholder='Email' style="width: 300px;"/>
     </div>
     <div>
-        <label for='pwd'>Password</label>
-        <input name='pwd' type='password' placeholder='Password'/>
+        <input name='pwd' type='password' placeholder='Password' style="width: 300px;"/>
     </div>
     <div>
         <label for='remember'>Remember Me</label>
         <input name='remember' type='checkbox'/>
     </div>
-    <a href="/verify_email">Forget Password?</a>
+    <a href="/verify_email" style="color: #F0F8FF;">Forget Password?</a>
     <button>Log in</button>
 {% endblock %}

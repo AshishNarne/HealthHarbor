@@ -1,25 +1,24 @@
 {% extends '_form.html' %}
 
 {% block form_content %}
+<h1 class="signup-title">Create an account</h1>
     <div>
-        <label for='email'>Email</label>
-        <input name='email' type='text' placeholder='Email'/>
+        <input name='fname' type='text' placeholder='First Name' style="width: 148px;"/>
+        <input name='lname' type='text' placeholder='Last Name' style="width: 148px;"/>
     </div>
     <div>
-        <label for='fname'>First Name</label>
-        <input name='fname' type='text' placeholder='First Name'/>
+        <input name='email' type='text' placeholder='Email' style="width: 300px;"/>
     </div>
     <div>
-        <label for='lname'>Last Name</label>
-        <input name='lname' type='text' placeholder='Last Name'/>
-    </div>
-    <div>
-        <label for='pwd'>Password</label>
-        <input name='pwd' type='password' placeholder='Password'/>
+        <input name='pwd' type='password' placeholder='Password' style="width: 300px;"/>
     </div>
     <div>
         <label for='doctor'>Are you a doctor?</label>
         <input name='doctor' type='checkbox'/>
+    </div>
+    <div>
+        <label for='login_redirect'>Have an account?</label>
+        <a href="{{ url_for('account_pages.login') }}" style="color: #F0F8FF;">Login</a>
     </div>
     <button>Sign up</button>
 {% endblock %}
