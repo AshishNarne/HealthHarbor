@@ -75,8 +75,11 @@ def add_repeating_reminder():
 
 
 def create_repeating_reminder(desired_days, end_date, title, desc, patient_id, time):
-    today = datetime.datetime.today()
+    today = datetime.date.today()
     this_monday = today - datetime.timedelta(days=today.weekday())
+    this_monday = datetime.datetime(
+        this_monday.year, this_monday.month, this_monday.day
+    )
     week = 0
     while True:
         # iterate through all the weekdays someone wants a reminder
