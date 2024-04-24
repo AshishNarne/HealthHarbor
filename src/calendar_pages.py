@@ -79,12 +79,14 @@ def create_repeating_reminder(desired_days, end_date, title, desc, patient_id, t
     this_monday = today - datetime.timedelta(days=today.weekday())
     week = 0
     while True:
+        # iterate through all the weekdays someone wants a reminder
         for desired_day in desired_days:
             reminder_datetime = this_monday + datetime.timedelta(
                 weeks=week, days=desired_day, hours=time.hour, minutes=time.minute
             )
             if reminder_datetime < datetime.datetime.now():
                 continue
+            # if current day is past their desired end date, stop
             if reminder_datetime > end_date + datetime.timedelta(days=1):
                 return
             new_reminder = Reminder(
@@ -125,6 +127,8 @@ def calendar():
     week = int(request.args.get("week", "0"))
 
     today = datetime.date.today()
+    # calculate the first day that should be displayed in the calendar
+    # week variable controls which week is displayed
     monday = (
         today
         - datetime.timedelta(days=today.weekday())
@@ -148,6 +152,7 @@ def calendar():
 @bp.route("/delete-reminder", methods=["POST"])
 @login_required
 def delete_reminder():
+    # patients are forbidden from deleting reminders
     if current_user.user_type != "doctor":
         return render_template("pages/forbidden.html"), 403
     week = int(request.args.get("week"))
@@ -160,10 +165,12 @@ def delete_reminder():
 @bp.route("/add-patient", methods=["GET", "POST"])
 def add_patient():
     if current_user.user_type != "doctor":
+        # patients are forbidden from adding other patients
         return render_template("pages/forbidden.html"), 403
     patients = []
     input_name = request.form.get("name")
     if input_name is not None:
+        # find all patients with a similar name to the input query
         patients = Patient.query.filter(
             (Patient.fname + " " + Patient.lname).like(input_name + "%")
         ).all()
@@ -172,6 +179,7 @@ def add_patient():
 
 @bp.route("/request-patient", methods=["POST"])
 def request_patient():
+    # add patient to a doctor's "network"
     patient_id = int(request.form.get("patient_id"))
     doctor_id = int(request.form.get("doctor_id"))
     patient = Patient.query.get(patient_id)

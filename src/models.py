@@ -20,6 +20,8 @@ class User(UserMixin, db.Model):
     }
 
 
+# model for connection between doctor and patient
+# necessary since this is a many-to-many relationship
 class DoctorPatient(db.Model):
     __tablename__ = "doctor_patient"
 
@@ -69,6 +71,7 @@ class Reminder(db.Model):
     email_sent: Mapped[str] = mapped_column()
 
 
+# model for a single direct message
 class Message(db.Model):
     id: Mapped[int] = mapped_column(primary_key=True)
     from_id: Mapped[int] = mapped_column(ForeignKey("user.id"))
