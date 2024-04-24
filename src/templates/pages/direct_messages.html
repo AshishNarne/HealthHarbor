@@ -34,7 +34,7 @@
                 {% endfor %}
             </ul>
             {% if dm_other is not none %}
-                <form method="post">
+                <form method="post" autocomplete="off">
                     <input hidden name="other-user-id" value="{{dm_other.id}}"/>
                     <input name="send-dm-input" class="send-dm-input"/>
                     <input type="submit" style="display: none"/>
